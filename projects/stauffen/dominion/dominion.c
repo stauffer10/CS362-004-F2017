@@ -1262,6 +1262,8 @@ int updateCoins(int player, struct gameState *state, int bonus)
   return 0;
 }
 
+//extra functions for 5 cards - played in cardEffect
+
 
 //end of dominion.c
 
