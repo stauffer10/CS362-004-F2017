@@ -7,7 +7,7 @@ int caAdventurer(struct gameState * state, int currentPlayer)
   int tempHandCounter = 0;
   int cardDrawn;
 
-  while (drawnTreasure < 2) {
+  while (drawnTreasure <= 2) {
     //if the deck is empty we need to shuffle discard and add to deck
     if (state->deckCount[currentPlayer] < 1) {
       shuffle(currentPlayer, state);
@@ -42,20 +42,17 @@ int caCutpurse(struct gameState * state, int currentPlayer, int handPos)
 
   for (i = 0; i < state->numPlayers; i++)
   {
-    if (i != currentPlayer)
-    {
-      for (j = 0; j < state->handCount[i]; j++) {
-        if (state->hand[i][j] == copper) {
-          discardCard(j, i, state, 0);
-          break;
-        }
-        if (j == state->handCount[i]) {
-          for (k = 0; k < state->handCount[i]; k++) {
-            if (DEBUG)
-            printf("Player %d reveals card number %d\n", i, state->hand[i][k]);
-          }	
-          break;
-        }
+    for (j = 0; j < state->handCount[i]; j++) {
+      if (state->hand[i][j] == copper) {
+        discardCard(j, i, state, 0);
+        break;
+      }
+      if (j == state->handCount[i]) {
+        for (k = 0; k < state->handCount[i]; k++) {
+          if (DEBUG)
+          printf("Player %d reveals card number %d\n", i, state->hand[i][k]);
+        }	
+        break;
       }
     }
   }
@@ -70,7 +67,7 @@ int caCutpurse(struct gameState * state, int currentPlayer, int handPos)
 int caGreatHall(struct gameState * state, int currentPlayer, int handPos)
 {
   //+1 Card
-  drawCard(currentPlayer, state);
+  drawCard(handPos, state);
 
   //+1 Actions
   state->numActions++;
@@ -111,7 +108,7 @@ int caSmithy(struct gameState * state, int currentPlayer, int handPos)
   }
 
   //discard card from hand
-  discardCard(handPos, currentPlayer, state, 0);
+  discardCard(handPos, currentPlayer, state, 1);
 
   return 0;
 }
