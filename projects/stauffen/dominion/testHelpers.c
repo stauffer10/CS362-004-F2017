@@ -1,4 +1,7 @@
 //test helper functions
+#include "testHelpers.h"
+#include "dominion.h"
+#include <stdio>
 
 //makeshift assert function for int
 //and providing extra print statements
