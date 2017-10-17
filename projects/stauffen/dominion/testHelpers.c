@@ -27,7 +27,7 @@ void compareKC(struct gameState *G1, struct gameState *G2){
 	int mistakes = 0;
 
 	//kingdom cards are enum 7-26
-	for (i=7; i<=26; i++){
+	for (i=adventurer; i<=treasure_map; i++){
 		if (G1->supplyCount[i] != G2->supplyCount[i]){
 			mistakes++
 		}		
@@ -48,8 +48,7 @@ void compareVC(struct gameState *G1, struct gameState *G2){
 	int i;
 	int mistakes = 0;
 
-	//victory cards are enum 1-3
-	for (i=1; i<=3; i++){
+	for (i=estate; i<=province; i++){
 		if (G1->supplyCount[i] != G2->supplyCount[i]){
 			mistakes++
 		}		
