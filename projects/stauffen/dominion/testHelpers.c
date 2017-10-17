@@ -5,14 +5,14 @@
 
 //makeshift assert function for int
 //and providing extra print statements
-int intAssert(int a, int b){
+int intAssert(int received, int expected){
 	
-	if (a == b){ 
+	if (received == expected){ 
 		printf("TEST PASSED\n");
 	}
 
 	else{
-		printf("TEST FAILED: EXPECTED %d, RECEIVED %d\n", a, b);
+		printf("TEST FAILED: EXPECTED %d, RECEIVED %d\n", expected, received);
 		return 1;
 	}
 
@@ -64,9 +64,8 @@ void compareVC(struct gameState *G1, struct gameState *G2){
 }
 
 
-//function to compare entire gamestates for a specific player
-//the only relevant attributes to test are the cards in the player's full deck
-void comparePlayerGameStates(int player, struct gameState *G1, struct gameState *G2){
+//function to compare entire deck states for a specific player
+void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState *G2){
 	
 
 	int mistakes, i;
