@@ -669,6 +669,7 @@ void adventurerEffect(struct gameState *state, int currentPlayer, int *temphand)
 
 void smithyEffect(int currentPlayer, int handPos, struct gameState *state)
 {
+  int i;
   for (i = 1; i < 3; i++)
   {
     drawCard(currentPlayer, state);
@@ -680,7 +681,9 @@ void smithyEffect(int currentPlayer, int handPos, struct gameState *state)
 
 void council_roomEffect(int currentPlayer, struct gameState *state, int handPos)
 {
+  int i;
   //+4 Cards
+
   for (i = 0; i < 4; i++)
   {
     drawCard(currentPlayer, state);
