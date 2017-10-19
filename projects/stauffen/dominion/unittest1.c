@@ -102,7 +102,7 @@ int main(){
 	printf("TESTING FIRST TURN ATTRIBUTES... \n");
 	printf("NUMBUYS: "); intAssert(G->numBuys, 1);
 	printf("NUMACTIONS: "); intAssert(G->numActions, 1);
-	printf("WHOSETURN: "); intAssert(G->whoseTurn, 1);
+	printf("WHOSETURN: "); intAssert(G->whoseTurn, 0);
 	printf("OUTPOSTPLAYED: "); intAssert(G->outpostPlayed, 0);
 
 
