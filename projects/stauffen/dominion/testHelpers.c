@@ -5,18 +5,16 @@
 
 //makeshift assert function for int
 //and providing extra print statements
-int intAssert(int received, int expected){
+void intAssert(int received, int expected){
 	
 	if (received == expected){ 
 		printf("TEST PASSED\n");
 	}
 
 	else{
-		printf("TEST FAILED: EXPECTED %d, RECEIVED %d\n", expected, received);
-		return 1;
+		printf("TEST FAILED: EXPECTED %d, RECEIVED %d\n", expected, received);	
 	}
 
-	return 0;
 }
 
 
