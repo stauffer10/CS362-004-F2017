@@ -9,19 +9,24 @@
 
 int main(){
 
-	//establish variables
+	int result, seed = 42;
+	struct gameState *G1, *G2;
+	int i, j, numberOfPlayers, copperCount, estateCount; 
+	int *kCards;
 
-
-	//initialize generic game
-
+	//set up attributes for a game
+	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
+	G1 = newGame();							//game state
+	numberOfPlayers = 2;						//legal numPlayers
+	
+	//call initializeGame
+	result = initializeGame(numberOfPlayers, kCards, seed, G);
 
 	//copy second gameState from first
+	memcpy(G2, G1, sizeOf(struct gameState));
 
-
-	//call fullDeckCount for first player
-
-
-	//Does first player have correct number of each card to start game?
+	//call fullDeckCount for first player and verify it is 10
+	count = fullDeckCount(1, c
 
 
 	//add a smithy to deck, subtract 4 copper
