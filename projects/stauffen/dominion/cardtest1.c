@@ -9,49 +9,88 @@
 
 int main(){
 
-	//set attributes
+	int result, seed = 12;
+	struct gameState *G1, *G2;
+	int i, j, numberOfPlayers; 
+	int *kCards;
+	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
 
-
+	//set up attributes for a game
+	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
+	G = newGame();							//game state
+	numberOfPlayers = 3;						//legal numPlayers
+	
 	//initialize 3 player game with adventurer
+	result = initializeGame(numberOfPlayers, kCards, seed, G);
 
-
-	//edit gameState so that player 1 has no treasure cards in hand
-
+	//manually edit gameState so that player 1 has adventurer, 2 estates, and 2 copper in hand
+	G1->hand[0][0] = adventurer;
+	G1->hand[0][1] = estate;
+	G1->hand[0][2] = estate;
+	G1->hand[0][3] = copper;
+	G1->hand[0][4] = copper;	
 
 	//copy first gameState to second
+	memcpy(G2, G1, sizeOf(struct gameState));
 
+	//call cardEffect with adventurer and check overall success
+	result = cardEffect(adventurer, 0, 0, 0, G1, 0, bonus);
+	printf("USING CARDEFFECT FUNCTION (ADVENTURER)... \n");
+	printf("TESTING FUNCTION SUCCESS... "); intAssert(result, 0);
 
-	//call cardEffect with adventurer
-
-
-	//check overall success (return 0)
-
-
-	//does player's hand have 2 treasure cards and total hand count of 7?
-
+	//does player's hand have 4 copper cards and total hand count of 7?
+	printf("TESTING HANDCOUNT... ");
+	intAssert(G1->handCount[0], G2->handCount[0] + 2)
+	printf("TESTING HAND FOR 4 COPPER... ");
+	j=0; //count variable
+	for (i=0; i<G1->handCount[0]; i++){
+		if (G1->hand[0][i] == copper){
+			j++;
+		}
+	}
+	intAssert(j, 4);
 
 	//are other players' gameStates changed (they shouldn't be)?
-
+	printf("TESTING OPPONENT DECK STATES...\n");
+	comparePlayerDeckStates(1, G1, G2);
+	comparePlayerDeckStates(2, G1, G2);
 
 	//are kingdom and victory card piles affected (they shouldn't be)?
-
+	printf("TESTING KINGDOM CARD COUNTS... ");
+	compareKC(G1, G2);
+	printf("TESTING VICTORY CARD COUNTS... ");
+	compareVC(G1, G2);
 
 	//reset gameState by copying from second
+	memcpy(G1, G2, sizeOf(struct gameState));
 
+	//call playAdventurer and check overall success
+	printf("USING PLAYADVENTURER FUNCTION...\n");
+	result = playAdventurer(0, G1); 
+	printf("TESTING OVERALL SUCCESS... "); intAssert(result, 0);
 
-	//call playAdventurer
-
-
-	//check overall success (return 0)
-
-
-	//does player's hand have 2 treasure cards and total hand count of 7?
-
+	//does player's hand have 4 copper cards and total hand count of 7?
+	printf("TESTING HANDCOUNT... ");
+	intAssert(G1->handCount[0], G2->handCount[0] + 2)
+	printf("TESTING HAND FOR 4 COPPER... ");
+	j=0; //count variable
+	for (i=0; i<G1->handCount[0]; i++){
+		if (G1->hand[0][i] == copper){
+			j++;
+		}
+	}
+	intAssert(j, 4);
 
 	//are other players' gameStates changed (they shouldn't be)?
-
+	printf("TESTING OPPONENT DECK STATES...\n");
+	comparePlayerDeckStates(1, G1, G2);
+	comparePlayerDeckStates(2, G1, G2);
 
 	//are kingdom and victory card piles affected (they shouldn't be)?
+	printf("TESTING KINGDOM CARD COUNTS... ");
+	compareKC(G1, G2);
+	printf("TESTING VICTORY CARD COUNTS... ");
+	compareVC(G1, G2);
 
 
 
