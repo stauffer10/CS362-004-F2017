@@ -6,7 +6,7 @@
 #include <stdlib.h>
 
 //extra functions for 5 cards - per assignment 2
-void playAdventurer(int currentPlayer, struct gameState *state){
+int playAdventurer(int currentPlayer, struct gameState *state){
   int drawntreasure = 0;	
   int cardDrawn;	
   int temphand[MAX_HAND];	int z = 0;
@@ -40,7 +40,7 @@ void playAdventurer(int currentPlayer, struct gameState *state){
 }
 
 
-void playSmithy(int currentPlayer, struct gameState *state, int handPos){
+int playSmithy(int currentPlayer, struct gameState *state, int handPos){
   
   int i;
         
@@ -56,7 +56,7 @@ void playSmithy(int currentPlayer, struct gameState *state, int handPos){
 }
 
 
-void playSteward(int currentPlayer, struct gameState *state, int choice1, int choice2, int choice3, int handPos){
+int playSteward(int currentPlayer, struct gameState *state, int choice1, int choice2, int choice3, int handPos){
 
   if (choice1 == 1){ 
           //+2 cards
@@ -82,7 +82,7 @@ void playSteward(int currentPlayer, struct gameState *state, int choice1, int ch
 }
 
 
-void playEmbargo(int currentPlayer, struct gameState *state, int choice1, int handPos){
+int playEmbargo(int currentPlayer, struct gameState *state, int choice1, int handPos){
         
   //+2 Coins 
   state->coins = state->coins + 2;
@@ -102,7 +102,7 @@ void playEmbargo(int currentPlayer, struct gameState *state, int choice1, int ha
 }
 
 
-void playSeaHag(int currentPlayer, struct gameState *state){
+int playSeaHag(int currentPlayer, struct gameState *state){
 
   int i;
         
