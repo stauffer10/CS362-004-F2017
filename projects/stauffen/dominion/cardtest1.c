@@ -4,24 +4,26 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	int result, seed = 12;
-	struct gameState *G1, *G2;
+	struct gameState *G1; 
+	struct gameState *G2;
 	int i, j, numberOfPlayers; 
 	int *kCards;
 	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
-	G = newGame();							//game state
+	G1 = newGame();
+	G2 = newGame();							//game states
 	numberOfPlayers = 3;						//legal numPlayers
 	
 	//initialize 3 player game with adventurer
-	result = initializeGame(numberOfPlayers, kCards, seed, G);
+	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//manually edit gameState so that player 1 has adventurer, 2 estates, and 2 copper in hand
 	G1->hand[0][0] = adventurer;
@@ -31,7 +33,7 @@ int main(){
 	G1->hand[0][4] = copper;	
 
 	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call cardEffect with adventurer and check overall success
 	result = cardEffect(adventurer, 0, 0, 0, G1, 0, bonus);
@@ -40,7 +42,7 @@ int main(){
 
 	//does player's hand have 4 copper cards and total hand count of 7?
 	printf("TESTING HANDCOUNT... ");
-	intAssert(G1->handCount[0], G2->handCount[0] + 2)
+	intAssert(G1->handCount[0], G2->handCount[0] + 2);
 	printf("TESTING HAND FOR 4 COPPER... ");
 	j=0; //count variable
 	for (i=0; i<G1->handCount[0]; i++){
@@ -62,7 +64,7 @@ int main(){
 	compareVC(G1, G2);
 
 	//reset gameState by copying from second
-	memcpy(G1, G2, sizeOf(struct gameState));
+	*G1 = *G2;
 
 	//call playAdventurer and check overall success
 	printf("USING PLAYADVENTURER FUNCTION...\n");
@@ -71,7 +73,7 @@ int main(){
 
 	//does player's hand have 4 copper cards and total hand count of 7?
 	printf("TESTING HANDCOUNT... ");
-	intAssert(G1->handCount[0], G2->handCount[0] + 2)
+	intAssert(G1->handCount[0], G2->handCount[0] + 2);
 	printf("TESTING HAND FOR 4 COPPER... ");
 	j=0; //count variable
 	for (i=0; i<G1->handCount[0]; i++){

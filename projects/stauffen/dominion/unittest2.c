@@ -4,7 +4,7 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
@@ -28,7 +28,7 @@ int main(){
 
 	printf("TESTING FULLDECKCOUNT... \n");
 	printf("COPPERS: "); intAssert(copperCount, 7);
-	printf("ESTATES: "); intAssert(etsateCount, 3);
+	printf("ESTATES: "); intAssert(estateCount, 3);
 	
 	//Were any non-deck related attributes of gameState affected by call to fullDeckCount? 
 	printf("TESTING FIRST TURN ATTRIBUTES... \n");

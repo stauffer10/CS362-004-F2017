@@ -4,26 +4,28 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	int result, seed = 25;
-	struct gameState *G1, *G2;
+	struct gameState *G1;
+	struct gameState *G2;
 	int i, j, numberOfPlayers; 
 	int *kCards;
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
-	G1 = newGame();							//game state
+	G1 = newGame();	
+	G2 = newGame();							//game states
 	numberOfPlayers = 2;						//legal numPlayers
 	
 	//call initializeGame
 	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call endTurn
 	result = endTurn(G1);
@@ -42,10 +44,9 @@ int main(){
 
 	//are numBuys and numActions reset to 1?
 	printf("TESTING TURN ATTRIBUTES... \n");
-	printf("NUMBUYS: "); intAssert(G->numBuys, 1);
-	printf("NUMACTIONS: "); intAssert(G->numActions, 1);
-	printf("OUTPOSTPLAYED: "); intAssert(G->outpostPlayed, 0);
-	printf("PLAYED CARD COUNT: "); intAssert(G->playedCardCount[0], 0);
+	printf("NUMBUYS: "); intAssert(G1->numBuys, 1);
+	printf("NUMACTIONS: "); intAssert(G1->numActions, 1);
+	printf("OUTPOSTPLAYED: "); intAssert(G1->outpostPlayed, 0);
 
 	//call endTurn again
 	result = endTurn(G1);

@@ -1,7 +1,7 @@
 //test helper functions
 #include "testHelpers.h"
 #include "dominion.h"
-#include <stdio>
+#include <stdio.h>
 
 //makeshift assert function for int
 //and providing extra print statements
@@ -27,7 +27,7 @@ void compareKC(struct gameState *G1, struct gameState *G2){
 	//kingdom cards are enum 7-26
 	for (i=adventurer; i<=treasure_map; i++){
 		if (G1->supplyCount[i] != G2->supplyCount[i]){
-			mistakes++
+			mistakes++;
 		}		
 	}
 
@@ -48,7 +48,7 @@ void compareVC(struct gameState *G1, struct gameState *G2){
 
 	for (i=estate; i<=province; i++){
 		if (G1->supplyCount[i] != G2->supplyCount[i]){
-			mistakes++
+			mistakes++;
 		}		
 	}
 
@@ -71,25 +71,21 @@ void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState 
 	//exit if failed so we don't have to waste time checking through each pile
 	if (G1->handCount[player] != G2->handCount[player]){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}
 
 	if (G1->deckCount[player] != G2->deckCount[player]){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}
 
 	
 	if (G1->discardCount[player] != G2->discardCount[player]){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}	
 
 	
-	if (G1->playedCardCount[player] != G2->playedCardCount[player]){
-		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
-	}
 
 	
 	//compare each card in hand
@@ -97,10 +93,11 @@ void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState 
 		if (G1->hand[player][i] != G2->hand[player][i]){
 			mistakes++;
 		}
-		
+	}	
+	
 	if (mistakes != 0){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}
 
 	//compare each card in deck
@@ -108,10 +105,11 @@ void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState 
 		if (G1->deck[player][i] != G2->deck[player][i]){
 			mistakes++;
 		}
-		
+	}	
+	
 	if (mistakes != 0){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}
 
 	//compare each card in discard
@@ -119,21 +117,16 @@ void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState 
 		if (G1->discard[player][i] != G2->discard[player][i]){
 			mistakes++;
 		}
+	}	
+	
+	if (mistakes != 0){
+		printf("GAMESTATE COMPARISON FAILED\n");
+		return;
+	}
 		
 	if (mistakes != 0){
 		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
-	}									
-
-	//compare each card in playedCards
-	for (i=0; i<G1->playedCardCount[player]; i++){
-		if (G1->playedCards[player][i] != G2->playedCards[player][i]){
-			mistakes++;
-		}
-		
-	if (mistakes != 0){
-		printf("GAMESTATE COMPARISON FAILED\n");
-		exit;
+		return;
 	}
 
 	printf("GAMESTATES EQUAL: TEST PASSED\n");			

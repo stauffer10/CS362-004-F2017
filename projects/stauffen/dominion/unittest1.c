@@ -4,7 +4,7 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
@@ -37,7 +37,7 @@ int main(){
 	intAssert(G->numPlayers, numberOfPlayers);
 
 	//Are all kingdom card supply counts correct? (10 for cards in play, 8 for gardens, -1 for others)
-`	printf("TESTING KINGDOM CARD SUPPLY COUNTS...\n");
+	printf("TESTING KINGDOM CARD SUPPLY COUNTS...\n");
 	for (i=adventurer; i<treasure_map; i++){
 		printf("Kcard #%d: ", i);
 		
@@ -109,13 +109,13 @@ int main(){
 	//Does initializeGame fail with bad kingdom card input?
 	printf("TESTING FUNCTION WITH BAD KCARD INPUT... ");
 	result = initializeGame(numberOfPlayers, badKCards, seed, G);
-	intAssert(result, 1);
+	intAssert(result, -1);
 
 
 	//Does initializeGame fail with bad number of players?
 	printf("TESTING FUNCTION WITH BAD NUM PLAYER INPUT... ");
 	result = initializeGame(badNumPlayers, kCards, seed, G);
-	intAssert(result, 1);
+	intAssert(result, -1);
 
 
 	return 0;

@@ -4,24 +4,26 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	int result, seed = 19;
-	struct gameState *G1, *G2;
+	struct gameState *G1; 
+	struct gameState *G2;
 	int i, j, numInDeck, numberOfPlayers; 
 	int *kCards;
 	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, sea_hag); 	 //10 kingdom cards
-	G = newGame();							//game state
+	G1 = newGame();
+	G2 = newGame();							//game states
 	numberOfPlayers = 4;						//legal numPlayers
 
 	//initialize 4 player game with sea hag
-	result = initializeGame(numberOfPlayers, kCards, seed, G);
+	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//manually put smithy in hand
 	G1->hand[0][0] = sea_hag;
@@ -31,7 +33,7 @@ int main(){
 	G1->hand[0][4] = copper;	
 
 	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call cardEffect with sea hag and check overall success
 	result = cardEffect(sea_hag, 0, 0, 0, G1, 0, bonus);
@@ -60,21 +62,23 @@ int main(){
 	compareVC(G1, G2);
 
 	//reset gameState by copying from second
-	memcpy(G1, G2, sizeOf(struct gameState));
+	*G1 = *G2;
 	
 	//call playSeaHag and check for overall success
 	printf("USING PLAYSEAHAG...\n");
-	result = playSeahHag(0, G1); 
+	result = playSeaHag(0, G1); 
 	printf("TESTING FUNCTION SUCCESS... "); intAssert(result, 0);
 
 	//do other 3 players have curse as first card in deck?
 	//does every other player have +1 discard?
+	printf("TESTING EACH OPPONENT...\n");
 	for (i=1; i<4; i++){
 		printf("PLAYER &d HAS CURSE CARD... ", i+1);
 		numInDeck = G1->deckCount[i];
 		intAssert(G1->deck[i][numInDeck-1], curse);
 		printf("PLAYER &d HAS +1 DISCARD... ", i+1);
 		intAssert(G1->discardCount[i], G2->discardCount[i] + 1);
+	}
 
 
 	//is player 1's gameState affected (it shouldn't be)?

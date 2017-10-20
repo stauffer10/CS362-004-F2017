@@ -4,24 +4,26 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	int result, seed = 50;
-	struct gameState *G1, *G2;
+	struct gameState *G1; 
+	struct gameState *G2;
 	int i, j, numberOfPlayers; 
 	int *kCards;
 	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, embargo); 	 //10 kingdom cards
-	G = newGame();							//game state
+	G1 = newGame();
+	G2 = newGame();							//game states
 	numberOfPlayers = 3;						//legal numPlayers
 
 	//initialize 3 player game with embargo and adventurer but not sea hag
-	result = initializeGame(numberOfPlayers, kCards, seed, G);
+	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//manually put smithy in hand
 	G1->hand[0][0] = embargo;
@@ -31,7 +33,7 @@ int main(){
 	G1->hand[0][4] = copper;	
 
 	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call cardEffect with embargo and adventurer as choice 1 and check overall success
 	result = cardEffect(embargo, adventurer, 0, 0, G1, 0, bonus);
@@ -54,7 +56,7 @@ int main(){
 	compareVC(G1, G2);
 
 	//reset gameState by copying from second
-	memcpy(G1, G2, sizeOf(struct gameState));
+	*G1 = *G2;
 
 	//call playEmbargo with adventurer as choice 1 and check overall success
 	printf("USING PLAYEMBARGO FUNCTION...\n");
@@ -77,11 +79,11 @@ int main(){
 	compareVC(G1, G2);
 
 	//reset gameState by copying from second
-	memcpy(G1, G2, sizeOf(struct gameState));
+	*G1 = *G2;
 
 	//call playEmbargo with sea hag as choice 1. Did it succeed? (it shouldn't)
 	printf("TESTING FUNCTION WITH CARD NOT IN PLAY... ");
-	result = playEmbargo(0, G1, sea_hag, 0); intAssert(result, 1);
+	result = playEmbargo(0, G1, sea_hag, 0); intAssert(result, -1);
 		
 
 	return 0;

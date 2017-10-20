@@ -2,8 +2,8 @@
 
 #include "dominion.h"
 
-#ifndef TESTHELPERS.H
-#define TESTHELPERS.H
+#ifndef TESTHELPERS_H
+#define TESTHELPERS_H
 
 void intAssert(int received, int expected);
 void compareKC(struct gameState *G1, struct gameState *G2);

@@ -4,28 +4,27 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	
 	int result, seed = 12;
-	struct gameState *G1,*G2;
+	struct gameState *G1;
+	struct gameState *G2;
 	int i, j, numberOfPlayers; 
 	int *kCards;
 	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
-	G = newGame();							//game state
+	G1 = newGame();	
+	G2 = newGame();						//game states
 	numberOfPlayers = 2;						//legal numPlayers
 	
 	//initialize 2 player game with smithy
-	result = initializeGame(numberOfPlayers, kCards, seed, G);
-
-	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//manually put smithy in hand
 	G1->hand[0][0] = smithy;
@@ -33,6 +32,9 @@ int main(){
 	G1->hand[0][2] = estate;
 	G1->hand[0][3] = copper;
 	G1->hand[0][4] = copper;	
+
+	//copy first gameState to second
+	*G2 = *G1;
 
 	//call cardEffect with smithy and check overall success
 	result = cardEffect(smithy, 0, 0, 0, G1, 0, bonus);
@@ -50,7 +52,6 @@ int main(){
 	//are other players' gameStates changed (they shouldn't be)?
 	printf("TESTING OPPONENT DECK STATES...\n");
 	comparePlayerDeckStates(1, G1, G2);
-	comparePlayerDeckStates(2, G1, G2);
 
 	//are kingdom and victory card piles affected (they shouldn't be)?
 	printf("TESTING KINGDOM CARD COUNTS... ");
@@ -59,7 +60,7 @@ int main(){
 	compareVC(G1, G2);
 
 	//reset gameState by copying from second
-	memcpy(G1, G2, sizeOf(struct gameState));
+	*G1 = *G2;
 
 	//call playSmithy and check overall success
 	printf("USING PLAYSMITHY FUNCTION...\n");
@@ -77,7 +78,6 @@ int main(){
 	//are other players' gameStates changed (they shouldn't be)?
 	printf("TESTING OPPONENT DECK STATES...\n");
 	comparePlayerDeckStates(1, G1, G2);
-	comparePlayerDeckStates(2, G1, G2);
 
 	//are kingdom and victory card piles affected (they shouldn't be)?
 	printf("TESTING KINGDOM CARD COUNTS... ");

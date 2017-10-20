@@ -4,28 +4,30 @@
 #include "dominion_helpers.h"
 #include "rngs.h"
 #include "testHelpers.h"
-#include <stdio>
+#include <stdio.h>
 
 
 int main(){
 
 	//set variables - including a makeshift supply count variable
 	int result, seed = 100;
-	struct gameState *G1, *G2;
+	struct gameState *G1;
+	struct gameState *G2;
 	int i, j, numberOfPlayers; 
 	int *kCards;
 	int supplyCount = 10;
 
 	//set up attributes for a game
 	kCards = kingdomCards(smithy, steward, feast, mine, baron, minion, tribute, cutpurse, outpost, embargo); 	 //10 kingdom cards
-	G1 = newGame();							//game state
+	G1 = newGame();	
+	G2 = newGame();							//game states
 	numberOfPlayers = 2;						//legal numPlayers
 	
 	//initialize game that includes smithy but not adventurer
 	result = initializeGame(numberOfPlayers, kCards, seed, G1);
 
 	//copy first gameState to second
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call gainCard for player 0 with smithy and toFlag=1, decrease supply count
 	printf("GAINCARD TO DECK...\n");
@@ -53,16 +55,16 @@ int main(){
 	//smithy is first index of kCards so check 1-9
 	printf("TESTING ALL OTHER KINGDOM CARD PILES...\n");
 	for (i=1; i<10; i++){
-		printf("kCard index %d: ");
-		intAssert(G1->supplyCount[kCard[i]], 10);
+		printf("kCard index %d: ", i);
+		intAssert(G1->supplyCount[kCards[i]], 10);
 	}
 
 	//is deckCount increased by 1?
 	printf("TESTING PLAYER DECK... \n");
-	printf("DECKCOUNT: "); intAssert(G1->deckCount, G2->deckCount + 1);
+	printf("DECKCOUNT: "); intAssert(G1->deckCount[0], G2->deckCount[0] + 1);
 
 	//copy second gameState from first again
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call gainCard with smithy and toFlag=2, decrease supply count
 	printf("GAINCARD TO HAND...\n");	
@@ -74,10 +76,10 @@ int main(){
 
 	//is handCount increased by 1?
 	printf("TESTING PLAYER HAND... \n");
-	printf("HANDCOUNT: "); intAssert(G1->handCount, G2->handCount + 1);
+	printf("HANDCOUNT: "); intAssert(G1->handCount[0], G2->handCount[0] + 1);
 
 	//copy second gameState from first again
-	memcpy(G2, G1, sizeOf(struct gameState));
+	*G2 = *G1;
 
 	//call gainCard with smithy and toFlag=3, decrease supply count
 	printf("GAINCARD TO DISCARD...\n");	
@@ -89,13 +91,13 @@ int main(){
 
 	//is discardCount increased by 1?
 	printf("TESTING PLAYER DISCARD... \n");
-	printf("DISCARDCOUNT: "); intAssert(G1->discardCount, G2->discardCount + 1);
+	printf("DISCARDCOUNT: "); intAssert(G1->discardCount[0], G2->discardCount[0] + 1);
 
 
 	//try to call gainCard for adventurer
 	//did call succeed (it shouldn't)?
 	printf("TESTING WITH CARD NOT IN GAME... ");
-	result = gainCard(adventurer, G1, 1, 0); intAssert(result, 1);
+	result = gainCard(adventurer, G1, 1, 0); intAssert(result, -1);
 
 	
 	return 0;
