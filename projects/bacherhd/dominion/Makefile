@@ -69,7 +69,7 @@ cardtests: cardtest1 cardtest2 cardtest3 cardtest4
 
 unittests: unittest1 unittest2 unittest3 unittest4
 
-tests: cardtests unittests
+unittestresults.out: cardtests unittests
 	./cardtest1 > unittestresults.out 
 	./cardtest2 >> unittestresults.out
 	./cardtest3 >> unittestresults.out
