@@ -1,5 +1,50 @@
 CFLAGS = -Wall -fpic -coverage -lm
 
+unittestresults.out: unittest1.c unittest2.c unittest3.c unittest4.c cardtest1.c cardtest2.c cardtest3.c cardtest4.c testHelpers.c rngs.c dominion.c
+	echo "**********Nathan Stauffer - Assignment 3 unit tests**************" > unittestresults.out
+
+	echo "unittest1 - initializeGame function:" >> unittestresults.out
+	gcc -o unittest1 unittest1.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	unittest1 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "unittest2 - fullDeckCount function:" >> unittestresults.out
+	gcc -o unittest2 unittest2.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	unittest2 >> unittestresults.out	
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "unittest3 - endTurn function:" >> unittestresults.out
+	gcc -o unittest3 unittest3.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	unittest3 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "unittest4 - gainCard function:" >> unittestresults.out
+	gcc -o unittest4 unittest4.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	unittest4 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "cardTest1 - adventurer:" >> unittestresults.out    
+	gcc -o cardtest1 cardtest1.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	cardtest1 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "cardTest2 - smithy:" >> unittestresults.out
+	gcc -o cardtest2 cardtest2.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	cardtest2 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "cardTest3 - embargo:" >> unittestresults.out
+	gcc -o cardtest3 cardtest3.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	cardtest3 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+	echo "cardTest4 - sea hag:" >> unittestresults.out
+	gcc -o cardtest4 cardtest4.c dominion.c testHelpers.c rngs.c -g $(CFLAGS)
+	cardtest4 >> unittestresults.out
+	gcov -b dominion.c >> unittestresults.out
+
+
+
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
 
@@ -36,4 +81,4 @@ player: player.c interface.o
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe *1 *2 *3 *4

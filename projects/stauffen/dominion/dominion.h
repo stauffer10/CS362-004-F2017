@@ -73,6 +73,12 @@ struct gameState {
   int playedCardCount;
 };
 
+int playAdventurer(int currentPlayer, struct gameState *state);
+int playSmithy(int currentPlayer, struct gameState *state, int handPos);
+int playSteward(int currentPlayer, struct gameState *state, int choice1, int choice2, int choice3, int handPos);
+int playEmbargo(int currentPlayer, struct gameState *state, int choice1, int handPos);
+int playSeaHag(int currentPlayer, struct gameState *state);
+
 /* All functions return -1 on failure, and DO NOT CHANGE GAME STATE;
    unless specified for other return, return 0 on success */
 
