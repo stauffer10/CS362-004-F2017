@@ -21,7 +21,9 @@ int main(){
 	int loopIndex, i, j, k, numberOfPlayers; 
 	int *kCards;
 	int *bonus = &seed;  //generic int pointer to use as necessary function parameter
-	int randInt;
+	int randInt, handPos;
+	int numTests = 10;
+	char *failedTests[numTests];  //each time a test fails, it's title will be put here
 
 	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
@@ -33,6 +35,11 @@ int main(){
 
 	//within loop...
 	for (loopIndex=0; loopIndex<ITERATIONS; loopIndex++){
+
+		//clear failed tests array
+		for (i=0; i<numTests; i++){
+			strcpy(failedTests[i], " ");
+		}
 		
 		//randomize numPlayers (2-4) and seed for initializeGame()
 		numberOfPlayers = (rand()%3) + 2;
@@ -47,21 +54,28 @@ int main(){
 		//manually place adventurer in hand at random position
 		randInt = (int)(Random()*1000)%5;
 		G1->hand[G1->whoseTurn][randomInt] = adventurer;
+		handPos = randInt;
 		
 		//copy first gameState to second
 		*G2 = *G1;
 		
-		//call cardEffect with adventurer and check overall success
-		result = cardEffect(adventurer, 0, 0, 0, G1, 0, bonus);
+		//TEST #1 - call cardEffect with adventurer and check overall success
+		result = cardEffect(adventurer, 0, 0, 0, G1, handPos, bonus);
 		printf("TESTING CARDEFFECT (ADVENTURER) SUCCESS... "); assertResult = intAssert(result, 0);
 		failures += assertResult;         //if test failed, assertResult is 1 and adds 1 to "failures"
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "cardEffect did not return success\n");
+		}
 		
-		//does player have total handcount of 7?
+		//TEST #2 - does player have total handcount of 7?
 		printf("TESTING HANDCOUNT... ");
 		assertResult = intAssert(G1->handCount[G1->whoseTurn], G2->handCount[G1->whoseTurn] + 2);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "cardEffect: handcount not updated correctly\n");
+		}
 		
-		//does player's hand have +2 copper cards?
+		//TEST #3 - does player's hand have +2 copper cards?
 		printf("TESTING HAND FOR +2 COPPER... ");
 		j=0; //count variable
 		for (i=0; i<G1->handCount[G1->whoseTurn]; i++){
@@ -77,8 +91,12 @@ int main(){
 		}
 		assertResult = intAssert(j, k+2);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "cardEffect: incorrect copper count in hand\n");
+		}
+
 		
-		//are any kingdom card supply counts changed?
+		//TEST #4 - are any kingdom card supply counts changed?
 		//kingdom cards are enum 7-26
 		printf("TESTING KINGDOM CARD COUNTS... ");
 		mistakes = 0;
@@ -89,8 +107,11 @@ int main(){
 		}
 		assertResult = intAssert(mistakes, 0);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "cardEffect: kingdom card supplies affected\n");
+		}
 		
-		//are any victory card supply counts changed?
+		//TEST #5 - are any victory card supply counts changed?
 		//victory cards are enum 1,2,3
 		printf("TESTING VICTORY CARD COUNTS... ");
 		mistakes = 0;
@@ -101,21 +122,30 @@ int main(){
 		}
 		assertResult = intAssert(mistakes, 0);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "cardEffect: victory card supplies affected\n");
+		}
 		
 		//reset gameState by copying from second
 		*G1 = *G2;
 
-		//call playAdventurer and check overall success
-		result = playAdventurer(0, G1); 
+		//TEST #6 - call playAdventurer and check overall success
+		result = playAdventurer(G1->whoseTurn, G1); 
 		printf("TESTING PLAYADVENTURER SUCCESS... "); assertResult = intAssert(result, 0);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "playAdventurer did not return success\n");
+		}
 		
-		//does player have total handcount of 7?
+		//TEST #7 - does player have total handcount of 7?
 		printf("TESTING HANDCOUNT... ");
 		assertResult = intAssert(G1->handCount[G1->whoseTurn], G2->handCount[G1->whoseTurn] + 2);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "playAdventurer: hand count not updated correctly\n");
+		}
 		
-		//does player's hand have +2 copper cards?
+		//TEST #8 - does player's hand have +2 copper cards?
 		printf("TESTING HAND FOR +2 COPPER... ");
 		j=0; //count variable
 		for (i=0; i<G1->handCount[G1->whoseTurn]; i++){
@@ -131,8 +161,11 @@ int main(){
 		}
 		assertResult = intAssert(j, k+2);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "playAdventurer: incorrect copper count in hand\n");
+		}
 		
-		//are any kingdom card supply counts changed?
+		//TEST #9 - are any kingdom card supply counts changed?
 		//kingdom cards are enum 7-26
 		printf("TESTING KINGDOM CARD COUNTS... ");
 		mistakes = 0;
@@ -143,8 +176,11 @@ int main(){
 		}
 		assertResult = intAssert(mistakes, 0);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "playAdventurer: kingdom card supplies affected\n");
+		}
 		
-		//are any victory card supply counts changed?
+		//TEST #10 - are any victory card supply counts changed?
 		//victory cards are enum 1,2,3
 		printf("TESTING VICTORY CARD COUNTS... ");
 		mistakes = 0;
@@ -155,13 +191,22 @@ int main(){
 		}
 		assertResult = intAssert(mistakes, 0);
 		failures += assertResult;
+		if (assertResult == 1){
+			pushString(failedTests, numTests, "playAdventurer: victory card supplies affected\n");
+		}
 		
 		//if failures > 0, report seed number and number of failures
 		if (failures > 0){
 			printf("********ITERATION %d: %d FAILURES USING SEED %d***********", loopIndex+1, failures, seed);
+			
+			//print all failed tests
+			printf("FAILED TESTS:\n");
+			for (i=0; i<numTests; i++){
+				printf("%s", failedTests[i]);
+			}
+			printf("\n");
 		}
-		
-		//maybe have an array of test numbers and keep track of what failed?
+
 	}
 	
 		

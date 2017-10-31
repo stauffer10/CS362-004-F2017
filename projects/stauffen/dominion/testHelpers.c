@@ -272,3 +272,17 @@ void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G
 	G1->supplyCount[gold] = (int)(Random()*1000)%30;
 		
 }
+
+void pushString(char *arr[], int length, char *string){
+
+	int empty = 0;      //flag set to 1 when first empty space found
+	int i;
+
+	for (i=0; i<length; i++){
+		if (empty == 0 && strcmp(arr[i], " ") == 0){
+			empty = 1;
+			strcpy(arr[i], string);
+		}
+	}
+
+}
