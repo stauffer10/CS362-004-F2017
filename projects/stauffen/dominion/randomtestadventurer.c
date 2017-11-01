@@ -6,8 +6,8 @@
 #include "testHelpers.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define ITERATIONS	1000;
 
 int main(){
 	
@@ -24,26 +24,26 @@ int main(){
 	int randInt, handPos;
 	int numTests = 10;
 	char *failedTests[numTests];  //each time a test fails, it's title will be put here
-
-	//set up attributes for a game
 	kCards = kingdomCards(adventurer, feast, mine, smithy, baron, minion, tribute, cutpurse, outpost, gardens); 	 //10 kingdom cards
 	G1 = newGame();
-	G2 = newGame();							//game states
-	int numberOfPlayers;	
+	G2 = newGame();							//game states	
 	int assertResult, mistakes, failures = 0;      //keeps track of failed tests for each iteration
 
 
 	//within loop...
-	for (loopIndex=0; loopIndex<ITERATIONS; loopIndex++){
+	for (loopIndex=0; loopIndex<50; loopIndex++){
 
+		//clear failures
+		failures = 0;
+		
 		//clear failed tests array
 		for (i=0; i<numTests; i++){
-			strcpy(failedTests[i], " ");
+			failedTests[i] = " ";
 		}
 		
 		//randomize numPlayers (2-4) and seed for initializeGame()
 		numberOfPlayers = (rand()%3) + 2;
-		seed = rand()%ITERATIONS;
+		seed = rand()%1000;
 		
 		//initialize game
 		result = initializeGame(numberOfPlayers, kCards, seed, G1);
@@ -53,7 +53,7 @@ int main(){
 				
 		//manually place adventurer in hand at random position
 		randInt = (int)(Random()*1000)%5;
-		G1->hand[G1->whoseTurn][randomInt] = adventurer;
+		G1->hand[G1->whoseTurn][randInt] = adventurer;
 		handPos = randInt;
 		
 		//copy first gameState to second

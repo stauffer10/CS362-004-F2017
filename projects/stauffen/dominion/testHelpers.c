@@ -1,12 +1,14 @@
 //test helper functions
 #include "testHelpers.h"
 #include "dominion.h"
+#include "rngs.h"
 #include <stdio.h>
+#include <string.h>
 
 //makeshift assert function for int
 //and providing extra print statements
 //as an added test meausre, returns 0 if test passed, 1 otherwise
-void intAssert(int received, int expected){
+int intAssert(int received, int expected){
 	
 	if (received == expected){ 
 		printf("TEST PASSED\n");
@@ -138,9 +140,11 @@ void comparePlayerDeckStates(int player, struct gameState *G1, struct gameState 
 //function for use in random tester. Randomizes all universal attributes of a game state
 void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G1){
 	
+	int i, j, randInt;
+	
 	//randomize whoseTurn
 	randInt = (int)(Random()*1000)%numberOfPlayers;
-	G1->whoseTurn = randomInt;
+	G1->whoseTurn = randInt;
 	
 	//build hand
 	G1->handCount[G1->whoseTurn] = 5;
@@ -148,25 +152,25 @@ void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G
 		
 		randInt = (int)(Random()*1000)%17;     //17 options - 10 kCards, 3 treasure, 3 victory, curse
 		
-		if (randomInt < 10){
-			G1->hand[G1->whoseTurn][i] = kCards[randomInt];
+		if (randInt < 10){
+			G1->hand[G1->whoseTurn][i] = kCards[randInt];
 		}
-		else if (randomInt == 10){
+		else if (randInt == 10){
 			G1->hand[G1->whoseTurn][i] = estate;
 		}
-		else if (randomInt == 11){
+		else if (randInt == 11){
 			G1->hand[G1->whoseTurn][i] = duchy;	
 		}
-		else if (randomInt == 12){
+		else if (randInt == 12){
 			G1->hand[G1->whoseTurn][i] = province;
 		}
-		else if (randomInt == 13){
+		else if (randInt == 13){
 			G1->hand[G1->whoseTurn][i] = copper;
 		}
-		else if (randomInt == 14){
+		else if (randInt == 14){
 			G1->hand[G1->whoseTurn][i] = silver;	
 		}
-		else if (randomInt == 15){
+		else if (randInt == 15){
 			G1->hand[G1->whoseTurn][i] = gold;
 		}
 		else{
@@ -180,25 +184,25 @@ void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G
 		
 		randInt = (int)(Random()*1000)%17;     //17 options - 10 kCards, 3 treasure, 3 victory, curse
 		
-		if (randomInt < 10){
-			G1->deck[G1->whoseTurn][i] = kCards[randomInt];
+		if (randInt < 10){
+			G1->deck[G1->whoseTurn][i] = kCards[randInt];
 		}
-		else if (randomInt == 10){
+		else if (randInt == 10){
 			G1->deck[G1->whoseTurn][i] = estate;
 		}
-		else if (randomInt == 11){
+		else if (randInt == 11){
 			G1->deck[G1->whoseTurn][i] = duchy;
 		}
-		else if (randomInt == 12){
+		else if (randInt == 12){
 			G1->deck[G1->whoseTurn][i] = province;
 		}
-		else if (randomInt == 13){
+		else if (randInt == 13){
 			G1->deck[G1->whoseTurn][i] = copper;
 		}
-		else if (randomInt == 14){
+		else if (randInt == 14){
 			G1->deck[G1->whoseTurn][i] = silver;
 		}
-		else if (randomInt == 15){
+		else if (randInt == 15){
 			G1->deck[G1->whoseTurn][i] = gold;
 		}
 		else{
@@ -211,25 +215,25 @@ void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G
 		
 		randInt = (int)(Random()*1000)%17;     //17 options - 10 kCards, 3 treasure, 3 victory, curse
 		
-		if (randomInt < 10){
-			G1->discard[G1->whoseTurn][i] = kCards[randomInt];
+		if (randInt < 10){
+			G1->discard[G1->whoseTurn][i] = kCards[randInt];
 		}
-		else if (randomInt == 10){
+		else if (randInt == 10){
 			G1->discard[G1->whoseTurn][i] = estate;
 		}
-		else if (randomInt == 11){
+		else if (randInt == 11){
 			G1->discard[G1->whoseTurn][i] = duchy;
 		}
-		else if (randomInt == 12){
+		else if (randInt == 12){
 			G1->discard[G1->whoseTurn][i] = province;
 		}
-		else if (randomInt == 13){
+		else if (randInt == 13){
 			G1->discard[G1->whoseTurn][i] = copper;
 		}
-		else if (randomInt == 14){
+		else if (randInt == 14){
 			G1->discard[G1->whoseTurn][i] = silver;
 		}
-		else if (randomInt == 15){
+		else if (randInt == 15){
 			G1->discard[G1->whoseTurn][i] = gold;
 		}
 		else{
@@ -266,7 +270,7 @@ void randomizeGameState(int numberOfPlayers, int kCards[10], struct gameState *G
 		G1->supplyCount[duchy] = (int)(Random()*1000)%12;
 		G1->supplyCount[province] = (int)(Random()*1000)%12;
 	}
-	j = 60 - (7 * numPlayers);   //number of copper cards in supply
+	j = 60 - (7 * numberOfPlayers);   //number of copper cards in supply
 	G1->supplyCount[copper] = (int)(Random()*1000)%j;
 	G1->supplyCount[silver] = (int)(Random()*1000)%40;
 	G1->supplyCount[gold] = (int)(Random()*1000)%30;
@@ -281,7 +285,7 @@ void pushString(char *arr[], int length, char *string){
 	for (i=0; i<length; i++){
 		if (empty == 0 && strcmp(arr[i], " ") == 0){
 			empty = 1;
-			strcpy(arr[i], string);
+			arr[i] = string;
 		}
 	}
 
