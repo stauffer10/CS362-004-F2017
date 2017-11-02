@@ -11,6 +11,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 const int SEED = 42;
 const int N_PLAYERS = 2;
@@ -34,6 +35,83 @@ const char * C_ABV[] = {
 int genGameState (struct gameState * state)
 {
   return initializeGame(N_PLAYERS, (int *) K_CARDS, SEED, state);
+}
+
+
+int randomCard(int * kCards)
+{
+  int i = rand() % (adventurer + 1);
+  if (i == adventurer) 
+    i = kCards[rand() % 10];
+  return i;
+}
+
+void randomGameState (struct gameState * state)
+{
+  state->numPlayers = rand() % MAX_PLAYERS + 1;
+
+  int i, j, nChoices;
+  int kCards[10];
+  nChoices = treasure_map - adventurer + 1;
+  int kCardChoices[nChoices];
+  
+  /* set the possible values */
+  j = 0;
+  for (i = adventurer; i <= treasure_map; i++) {
+    kCardChoices[j++] = i; 
+  }
+
+  /* init curse, estate, duchy, province, copper, silver and gold to [0, 100] */
+  for (i = 0; i <= gold; i++) state->supplyCount[i] = rand() % 20;
+  
+  /* init kingdom cards to -1 */
+  for (i = adventurer; i <= treasure_map; i++) {
+    state->supplyCount[i] = -1;
+    state->embargoTokens[i] = rand() % 5;
+  } 
+
+  int choice;
+
+  /* choose kingdom cards, set supplies */
+  for (i = 0; i < 10; i++) {
+    choice = rand() % nChoices;
+    kCards[i] = kCardChoices[choice];
+    kCardChoices[choice] = kCardChoices[nChoices - 1];
+    nChoices--;
+    state->supplyCount[kCards[i]] = rand() % 20;
+  }
+  
+  state->outpostPlayed = 0;
+  state->outpostTurn   = 0;
+  state->whoseTurn     = rand() % state->numPlayers;
+  state->phase         = 0;
+  state->numActions    = rand() % 100;
+  state->coins         = rand() % 100;
+  state->numBuys       = rand() % 100;
+  
+  for (i = 0; i < state->numPlayers; i++) {
+
+    state->deckCount[i]    = rand() %  MAX_DECK;
+    state->handCount[i]    = rand() % (MAX_DECK - state->deckCount[i]);
+    state->discardCount[i] = rand() % (MAX_DECK - state->deckCount[i] - state->handCount[i]);
+    state->playedCardCount = rand() % (MAX_DECK - 
+      state->deckCount[i] - state->handCount[i] - state->discardCount[i]);
+
+    for (j = 0; j < state->handCount[i]; j++) {
+      state->hand[i][j] = randomCard(kCards);  
+    }
+    for (j = 0; j < state->deckCount[i]; j++) {
+      state->deck[i][j] = randomCard(kCards);
+    }
+    for (j = 0; j < state->discardCount[i]; j++) {
+      state->discard[i][j] = randomCard(kCards);
+    }
+
+    for (j = 0; j < state->playedCardCount; j++) {
+      state->playedCards[j] = randomCard(kCards);
+    }
+
+  }
 }
 
 

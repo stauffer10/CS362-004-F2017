@@ -65,6 +65,9 @@ unittest4: unittest4.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o
 player: player.c interface.o cardEffects.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o cardEffects.o $(CFLAGS)
 
+randomtest1: randomtest1.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o		
+	gcc -o randomtest1 randomtest1.c -g dominion.o rngs.o cardEffects.o testing.o cmpGameState.o $(CFLAGS)
+
 cardtests: cardtest1 cardtest2 cardtest3 cardtest4
 
 unittests: unittest1 unittest2 unittest3 unittest4
