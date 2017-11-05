@@ -78,4 +78,13 @@ void cpState(struct gameState *dst, struct gameState * src);
 
 int cardsUnchanged (struct gameState * stateA, struct gameState * stateB, int who, int where);
 
+
+int randomCard(int * kCards);
+
+void printSupplyCounts (struct gameState * state);
+
+void printGameState (struct gameState * state);
+
+void randomGameState (struct gameState * state);
+
 #endif

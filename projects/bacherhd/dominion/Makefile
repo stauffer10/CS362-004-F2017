@@ -1,4 +1,4 @@
-CFLAGS = -Wall -fpic -coverage -lm -g
+CFLAGS = -Wall -fpic -coverage -lm -g -fbounds-check
 
 rngs.o: rngs.h rngs.c
 	gcc -c rngs.c -g  $(CFLAGS)
@@ -65,12 +65,33 @@ unittest4: unittest4.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o
 player: player.c interface.o cardEffects.o
 	gcc -o player player.c -g  dominion.o rngs.o interface.o cardEffects.o $(CFLAGS)
 
-randomtest1: randomtest1.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o		
-	gcc -o randomtest1 randomtest1.c -g dominion.o rngs.o cardEffects.o testing.o cmpGameState.o $(CFLAGS)
+randomtestcard1: randomtestcard1.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o		
+	gcc -o randomtestcard1 randomtestcard1.c -g dominion.o rngs.o cardEffects.o testing.o cmpGameState.o $(CFLAGS)
+
+randomtestcard2: randomtestcard2.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o		
+	gcc -o randomtestcard2 randomtestcard2.c -g dominion.o rngs.o cardEffects.o testing.o cmpGameState.o $(CFLAGS)
+
+randomtestadventurer: randomtestadventurer.c dominion.o rngs.o cardEffects.o testing.o cmpGameState.o		
+	gcc -o randomtestadventurer randomtestadventurer.c -g dominion.o rngs.o cardEffects.o testing.o cmpGameState.o $(CFLAGS)
 
 cardtests: cardtest1 cardtest2 cardtest3 cardtest4
 
 unittests: unittest1 unittest2 unittest3 unittest4
+
+randomtests: randomtestcard1 randomtestcard2 randomtestadventurer
+
+randomtestcard1.out: randomtestcard1
+	./randomtestcard1 > randomtestcard1.out
+	gcov -bf cardEffects.c >> randomtestcard1.out
+
+randomtestcard2.out: randomtestcard2
+	./randomtestcard2 > randomtestcard2.out
+	gcov -bf cardEffects.c >> randomtestcard2.out
+		
+randomtestadventurer.out: randomtestadventurer
+	./randomtestadventurer > randomtestadventurer.out
+	gcov -bf cardEffects.c >> randomtestadventurer.out
+
 
 unittestresults.out: cardtests unittests
 	./cardtest1 > unittestresults.out 
@@ -84,7 +105,9 @@ unittestresults.out: cardtests unittests
 	gcov -bf dominion.c >> unittestresults.out
 	gcov -bf cardEffects.c >> unittestresults.out
 
+
+
 all: playdom player testDrawCard testBuyCard badTestDrawCard
 
 clean:
-	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe badTestDrawCard unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4
+	rm -f *.o playdom.exe playdom player player.exe  *.gcov *.gcda *.gcno *.so *.out testDrawCard testDrawCard.exe badTestDrawCard unittest1 unittest2 unittest3 unittest4 cardtest1 cardtest2 cardtest3 cardtest4 randomtestcard1 randomtestcard2 randomtestdaventurer

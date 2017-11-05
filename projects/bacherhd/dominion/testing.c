@@ -46,6 +46,43 @@ int randomCard(int * kCards)
   return i;
 }
 
+void printSupplyCounts (struct gameState * state)
+{
+  int i, j;
+  for (j = 0; j < 2; j++) {
+    for (i = 0; i < N_CARDS_IMPLEMENTED; i++) {
+      if (j == 0) {
+        printf("%4s", C_ABV[i]);
+      } else if (j == 1) {
+        printf("%4d", state->supplyCount[i]);
+      }
+    }
+    printf("\n");
+  }
+}
+
+void printGameState (struct gameState * state)
+{
+  int summary[N_CARDS_IMPLEMENTED];
+
+  printf("Player %d's turn\n", state->whoseTurn);
+
+  printf("nPlayers: %d, numActions: %d, coins: %d\n", state->numPlayers, state->numActions, state->coins);
+  printf("hand count: %d, deck count: %d, discard count: %d\n", 
+    state->handCount[state->whoseTurn], state->deckCount[state->whoseTurn], state->discardCount[state->whoseTurn]);
+
+  printf("Supply Counts...\n");
+  printSupplyCounts(state);
+  
+  printf("Hand...\n");
+  summarizeCards(summary, state, PLAYER[state->whoseTurn], HAND);
+  printSummary(summary);
+
+  printf("Deck...\n");
+  summarizeCards(summary, state, PLAYER[state->whoseTurn], DECK);
+  printSummary(summary);
+}
+
 void randomGameState (struct gameState * state)
 {
   state->numPlayers = rand() % MAX_PLAYERS + 1;
@@ -67,8 +104,11 @@ void randomGameState (struct gameState * state)
   /* init kingdom cards to -1 */
   for (i = adventurer; i <= treasure_map; i++) {
     state->supplyCount[i] = -1;
-    state->embargoTokens[i] = rand() % 5;
   } 
+
+  for (i = 0; i <= treasure_map; i++) {
+    state->embargoTokens[i] = rand() % 5;
+  }
 
   int choice;
 
@@ -100,9 +140,11 @@ void randomGameState (struct gameState * state)
     for (j = 0; j < state->handCount[i]; j++) {
       state->hand[i][j] = randomCard(kCards);  
     }
+
     for (j = 0; j < state->deckCount[i]; j++) {
       state->deck[i][j] = randomCard(kCards);
     }
+
     for (j = 0; j < state->discardCount[i]; j++) {
       state->discard[i][j] = randomCard(kCards);
     }
@@ -280,11 +322,11 @@ void printSummary (int * summary)
 {
   int i = 0;
   for (i = 0; i < N_CARDS_IMPLEMENTED; i++) {
-    printf("  %s", C_ABV[i]);
+    printf("%4s", C_ABV[i]);
   }
   printf("\n");
   for (i = 0; i < N_CARDS_IMPLEMENTED; i++) {
-    printf("%5d", summary[i]);
+    printf("%4d", summary[i]);
   }
   printf("\n");
 }
