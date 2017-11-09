@@ -2,6 +2,7 @@
 
 #include "dominion.h"
 #include "dominion_helpers.h"
+#include "cardEffects.h"
 #include "rngs.h"
 #include "testHelpers.h"
 #include <stdio.h>
@@ -129,8 +130,8 @@ int main(){
 		//reset gameState by copying from second
 		*G1 = *G2;
 
-		//TEST #6 - call playAdventurer and check overall success
-		result = playAdventurer(G1->whoseTurn, G1); 
+		//TEST #6 - call caAdventurer and check overall success
+		result = caAdventurer(G1, G1->whoseTurn); 
 		printf("TESTING PLAYADVENTURER SUCCESS... "); assertResult = intAssert(result, 0);
 		failures += assertResult;
 		if (assertResult == 1){
