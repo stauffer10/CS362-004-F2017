@@ -1,4 +1,4 @@
-//cardtest4 - tests the playSeaHag function of dominion.c
+//cardtest4 - tests the caSeaHag function of David's cardEffects.c
 
 #include "dominion.h"
 #include "dominion_helpers.h"
@@ -65,8 +65,8 @@ int main(){
 	*G1 = *G2;
 	
 	//call playSeaHag and check for overall success
-	printf("USING PLAYSEAHAG...\n");
-	result = playSeaHag(0, G1); 
+	printf("USING CA_SEAHAG...\n");
+	result = caSeaHag(G1, 0); 
 	printf("TESTING FUNCTION SUCCESS... "); intAssert(result, 0);
 
 	//do other 3 players have curse as first card in deck?
