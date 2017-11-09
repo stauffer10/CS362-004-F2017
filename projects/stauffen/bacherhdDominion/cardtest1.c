@@ -1,4 +1,4 @@
-//cardtest1 - tests the playAdventurer function of dominion.c
+//cardtest1 - tests the caAdventurer function of David's cardeffect.c
 
 #include "dominion.h"
 #include "dominion_helpers.h"
@@ -67,8 +67,8 @@ int main(){
 	*G1 = *G2;
 
 	//call playAdventurer and check overall success
-	printf("USING PLAYADVENTURER FUNCTION...\n");
-	result = playAdventurer(0, G1); 
+	printf("USING CA_ADVENTURER FUNCTION...\n");
+	result = caAdventurer(G1, 0); 
 	printf("TESTING OVERALL SUCCESS... "); intAssert(result, 0);
 
 	//does player's hand have 4 copper cards and total hand count of 7?
