@@ -4,6 +4,7 @@
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "rngs.h"
+#include "cardEffects.h"
 #include "testHelpers.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -118,9 +119,9 @@ int main(){
 		//reset gameState by copying from second
 		*G1 = *G2;
 
-		//TEST #6 - call playSmithy and check overall success
-		result = playSmithy(G1->whoseTurn, G1, handPos); 
-		printf("TESTING PLAYSMITHY SUCCESS... "); assertResult = intAssert(result, 0);
+		//TEST #6 - call caSmithy and check overall success
+		result = caSmithy(G1, G1->whoseTurn, handPos); 
+		printf("TESTING CA_SMITHY SUCCESS... "); assertResult = intAssert(result, 0);
 		failures += assertResult;
 		if (assertResult == 1){
 			pushString(failedTests, numTests, "playSmithy did not return success\n");
