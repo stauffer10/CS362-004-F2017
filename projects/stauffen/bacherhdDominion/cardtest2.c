@@ -1,4 +1,4 @@
-//cardtest2 - tests the caSmithy function of dominion.c
+//cardtest2 - tests the caSmithy function of David's cardEffect.c
 
 #include "dominion.h"
 #include "dominion_helpers.h"
