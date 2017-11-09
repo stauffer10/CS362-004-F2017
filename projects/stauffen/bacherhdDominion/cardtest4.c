@@ -45,10 +45,10 @@ int main(){
 	//also check that discard count is +1
 	printf("TESTING EACH OPPONENT...\n");
 	for (i=1; i<4; i++){
-		printf("PLAYER &d HAS CURSE CARD... ", i+1);
+		printf("PLAYER %d HAS CURSE CARD... ", i+1);
 		numInDeck = G1->deckCount[i];
 		intAssert(G1->deck[i][numInDeck-1], curse);
-		printf("PLAYER &d HAS +1 DISCARD... ", i+1);
+		printf("PLAYER %d HAS +1 DISCARD... ", i+1);
 		intAssert(G1->discardCount[i], G2->discardCount[i] + 1);
 	}
 
@@ -73,10 +73,10 @@ int main(){
 	//does every other player have +1 discard?
 	printf("TESTING EACH OPPONENT...\n");
 	for (i=1; i<4; i++){
-		printf("PLAYER &d HAS CURSE CARD... ", i+1);
+		printf("PLAYER %d HAS CURSE CARD... ", i+1);
 		numInDeck = G1->deckCount[i];
 		intAssert(G1->deck[i][numInDeck-1], curse);
-		printf("PLAYER &d HAS +1 DISCARD... ", i+1);
+		printf("PLAYER %d HAS +1 DISCARD... ", i+1);
 		intAssert(G1->discardCount[i], G2->discardCount[i] + 1);
 	}
 
