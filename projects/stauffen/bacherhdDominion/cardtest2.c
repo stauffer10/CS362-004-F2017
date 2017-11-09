@@ -1,7 +1,8 @@
-//cardtest2 - tests the playSmithy function of dominion.c
+//cardtest2 - tests the caSmithy function of dominion.c
 
 #include "dominion.h"
 #include "dominion_helpers.h"
+#include "cardEffects.h"
 #include "rngs.h"
 #include "testHelpers.h"
 #include <stdio.h>
@@ -63,8 +64,8 @@ int main(){
 	*G1 = *G2;
 
 	//call playSmithy and check overall success
-	printf("USING PLAYSMITHY FUNCTION...\n");
-	result = playSmithy(0, G1, 0); 
+	printf("USING CA_SMITHY FUNCTION...\n");
+	result = caSmithy(G1, 0, 0); 
 	printf("TESTING OVERALL SUCCESS... "); intAssert(result, 0);
 
 	//does player 1 handCount increase by 2? (+3 cards and -1 to discard smithy)
