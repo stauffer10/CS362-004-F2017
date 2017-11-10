@@ -1,0 +1,18 @@
+﻿Nathan Stauffer - CS362-400
+Bug reports for two bugs found in teammate dominion code
+
+
+Bug #1:
+Name of bug - player hand count not correctly updated by caAdventurer()
+
+
+In running unit tests for David’s caAdventurer() function, a bug was uncovered that is most likely the cause of a test failure. After calling caAdventurer(), the player should have two more treasure cards in hand, and therefore an overall hand count that is increased by two. However, caAdventurer() consistently produced incorrect player hand counts on multiple test runs under multiple game states. This bug can be reproduced by simply initializing a dominion game with any number of players, making sure the adventurer card is in the current player’s hand, and calling caAdventurer(). 
+
+
+
+
+Bug #2:
+Name of bug - curse card not placed at top of opponent decks by caSeaHag()
+
+
+In running unit tests for David’s caSeaHag() function, a bug was uncovered in the process of effectively distributing curse cards to each of the current players opponents. The sea hag card description states that playing the card should allow the current player to inflict a curse upon each opponent by forcing each opponent to draw a curse card and place it at the top of his/her deck, ensuring that it will be a part of the opponent’s following turn. However, running caSeaHag() with my unit test, which checks for proper card functionality, it is revealed that each opponent’s deck is not updated to have a curse card at the top of the deck. This bug can be reproduced by initializing a game state, ideally with the maximum number of players, making sure that sea hag is in the current player’s hand, and calling caSeaHag().
