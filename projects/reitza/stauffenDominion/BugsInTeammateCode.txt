@@ -1,0 +1,26 @@
+********************************************
+** Bug Report for Stauffen dominion code
+** By: Armand Reitz
+********************************************
+Smithy
+Error- when smithy is used the player using the card draws 4 cards instead of 3 cards. 
+The bug comes from the following for loop found inside the playSmithy function in Dominion.c. Since the loop runs from 0 through 3, the loop executes four times instead of three times. 
+for (i = 0; i <= 3; i++){
+    drawCard(currentPlayer, state);
+}	
+In order to witness the bug, just use play smithy directly or call card effect for smithy and note that the players hand has 4 cards added to it (granted the deck + discard has at least 4 cards)
+
+Adventurer
+Error: The played pile is not incremented after adventurer is played. When either cardEffect is called for adventurer or playAdventurer is called the number of cards in the played card pile does nott change when it should actually be incremented by 1. 
+Additionally, there is another error in playAdventurer that I actually just noticed by chance since it was covered up in the test by the fact that the gamestate already varied from the expected state and would otherwise be fairly complicated to test for. In the playAdventurer function, the deck gets shuffled if the deck contains less than 11 cards. In reality this should only be 1 instead of 11. This means that the deck and discard get shuffled up even if they are not supposed to unless the deck contains at least 11 cards. 
+        if (state->deckCount[currentPlayer] < 11){ 
+                shuffle(currentPlayer, state);
+        }
+
+cardEffect 
+Error: call card Effect with adventurer. The game state will differ from the expected outcome because the case statement for adventurer in cardEffect is not ended with a break or return statement so the next case statement is also carried out. Depending on what the initial game state is and how card effect is called the outcomes can be fairly different. In my case I called cardEffect for adventurer in a loop which ultimately caused a segfault, which is what ultimately allowed me to find this bug. (Note I corrected this bug in the code to allow the code to execute)
+
+discardCard()
+Error: card not added to discard pile, this is not an error that was introduced by my classmate. It was already part of the dominion.c code when we started. 
+
+
