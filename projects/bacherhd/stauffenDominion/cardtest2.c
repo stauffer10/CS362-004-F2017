@@ -7,7 +7,6 @@
 #include "testing.h"
 #include "dominion.h"
 #include "cmpGameState.h"
-#include "cardEffects.h"
 
 #include <stdio.h>
 #include <stdlib.h>
