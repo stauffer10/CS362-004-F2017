@@ -41,9 +41,55 @@ public class UrlValidatorTest extends TestCase {
    public void testManualTest()
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   //System.out.println(urlVal.isValid("http://www.amazon.com"));
 	   
+	   String[] validURLs = {"www.google.com",
+			   				"http://www.google.com",
+			   				"www.google.com:80",
+			   				"www.google.com/$23",
+			   				"www.google.com?action=view",
+			   				"http://www.google.com:80",
+			   				"http://www.google.com/$23",
+			   				"http://www.google.com?action=view",
+			   				"http://www.google.com",
+			   				"ftp://www.google.com:80/$23/t123?action=view",
+			   				"www.google.com:80/$23/t123?action=view",
+			   				"http://www.google.com:80/$23/t123",
+			   				"www.google.com:80/$23/t123",
+			   				"http://www.google.com/$23/t123?action=view",
+			   				"http://www.google.com?action=edit&mode=up",
+			   				"http://www.google.com:80/$23/t123?action=view"
+			   				};
 	   
+	   String[] invalidURLs = {"www.google.clax",
+  							"htt://www.google.com",
+  							"www.google.com:-80",
+  							"www.google.com/../$23",
+  							"www.google.com?action=view/#/",
+  							"htp://www.google.com:80",
+  							"http://1.2.3/$23",
+  							"http:/256.256.256.256?action=view",
+  							"http://?#.1.2.3",
+  							"ftp://www.google.com:80/ $23/t123?action=view",
+  							"www.google.com:80/$23/t123?=action=view",
+  							"http://www.google:com:80/$23/t123",
+  							"www.google.com:80:/$23/t123",
+  							"http://www.google.com/$23?/t123?action=view"};
+	   
+	    System.out.print("The following URLs were incorrectly identified as invalid\n");   				
+	   for(int i = 0 ;i<validURLs.length;i++)
+	   {
+		   if(!urlVal.isValid(validURLs[i])) {
+			   System.out.println(validURLs[i]);
+		   }
+	   }
+	   System.out.print("\nThe following URLs were incorrectly identified as valid\n");
+	   for(int i = 0 ;i<invalidURLs.length;i++)
+	   {
+		   if(urlVal.isValid(invalidURLs[i])) {
+			   System.out.println(invalidURLs[i]);
+		   }
+	   }
    }
    
    
