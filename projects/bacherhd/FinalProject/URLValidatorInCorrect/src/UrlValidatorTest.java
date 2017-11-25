@@ -38,19 +38,130 @@ public class UrlValidatorTest extends TestCase {
    public void testManualTest()
    {
 	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-	   System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   //System.out.println(urlVal.isValid("http://www.amazon.com"));
+	   
+	   String[] validURLs = {"www.google.com",
+			   				"http://www.google.com",
+			   				"www.google.com:80",
+			   				"www.google.com/$23",
+			   				"www.google.com?action=view",
+			   				"http://www.google.com:80",
+			   				"http://www.google.com/$23",
+			   				"http://www.google.com?action=view",
+			   				"http://www.google.com",
+			   				"ftp://www.google.com:80/$23/t123?action=view",
+			   				"www.google.com:80/$23/t123?action=view",
+			   				"http://www.google.com:80/$23/t123",
+			   				"www.google.com:80/$23/t123",
+			   				"http://www.google.com/$23/t123?action=view",
+			   				"http://www.google.com?action=edit&mode=up",
+			   				"http://www.google.com:80/$23/t123?action=view"
+			   				};
+	   
+	   String[] invalidURLs = {"www.google.clax",
+  							"htt://www.google.com",
+  							"www.google.com:-80",
+  							"www.google.com/../$23",
+  							"www.google.com?action=view/#/",
+  							"htp://www.google.com:80",
+  							"http://1.2.3/$23",
+  							"http:/256.256.256.256?action=view",
+  							"http://?#.1.2.3",
+  							"ftp://www.google.com:80/ $23/t123?action=view",
+  							"www.google.com:80/$23/t123?=action=view",
+  							"http://www.google:com:80/$23/t123",
+  							"www.google.com:80:/$23/t123",
+  							"http://www.google.com/$23?/t123?action=view"};
+	   
+	    System.out.print("The following URLs were incorrectly identified as invalid\n");   				
+	   for(int i = 0 ;i<validURLs.length;i++)
+	   {
+		   if(!urlVal.isValid(validURLs[i])) {
+			   System.out.println(validURLs[i]);
+		   }
+	   }
+	   System.out.print("\nThe following URLs were incorrectly identified as valid\n");
+	   for(int i = 0 ;i<invalidURLs.length;i++)
+	   {
+		   if(urlVal.isValid(invalidURLs[i])) {
+			   System.out.println(invalidURLs[i]);
+		   }
+	   } 
    }
    
    
    public void testYourFirstPartition()
    {
-	   
+	   UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+
+		/****
+		* consider the five parts of URL - scheme, authority, port, path, query as
+		* [valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent]
+		* an example assertion may be [valid, valid, valid, valid, invalid]
+		****/
+
+		//first try valid URL's
+		//[valid, valid, valid, valid, valid]
+		assertTrue(urlVal.isValid("http://www.google.com:65535/test1?action=view"));
+		assertTrue(urlVal.isValid("http://afterzmusic.com:80/about/?action=edit&mode=up")); 	
+
+		//[absent, valid, valid, valid, valid]
+		assertTrue(urlVal.isValid("www.google.com:65535/test1?action=view"));
+		assertTrue(urlVal.isValid("afterzmusic.com:80/about/?action=edit&mode=up")); 
+
+		//[valid, valid, absent, valid, valid]
+		assertTrue(urlVal.isValid("http://www.google.com/test1?action=view"));
+		assertTrue(urlVal.isValid("http://afterzmusic.com/about/?action=edit&mode=up")); 
+
+		//[valid, valid, valid, absent, valid]
+		assertTrue(urlVal.isValid("http://www.google.com:65535?action=view"));
+		assertTrue(urlVal.isValid("http://afterzmusic.com:80?action=edit&mode=up")); 
+
+		//[valid, valid, valid, valid, absent]
+		assertTrue(urlVal.isValid("http://www.google.com:65535/test1"));
+		assertTrue(urlVal.isValid("http://afterzmusic.com:80/about/")); 
+
+		//[absent, valid, absent, valid, absent]
+		assertTrue(urlVal.isValid("www.google.com/test1"));
+		assertTrue(urlVal.isValid("afterzmusic.com/about/")); 
+
+		//[valid, valid, absent, absent, absent]
+		assertTrue(urlVal.isValid("http://www.google.com"));
+		assertTrue(urlVal.isValid("http://afterzmusic.com")); 
+
+		//try invalid URL's by testing one invalid section at a time
+		//[invalid, valid, valid, valid, valid]
+		assertFalse(urlVal.isValid("http:www.google.com:65535/test1?action=view"));
+		assertFalse(urlVal.isValid("://afterzmusic.com:80/about/?action=edit&mode=up")); 	
+
+		//[valid, invalid, valid, valid, valid]
+		assertFalse(urlVal.isValid("http://1.2.3:65535/test1?action=view"));
+		assertFalse(urlVal.isValid("http://afterz:80/about/?action=edit&mode=up")); 
+
+		//[valid, valid, invalid, valid, valid]
+		assertFalse(urlVal.isValid("http://www.google.com:-1/test1?action=view"));
+		assertFalse(urlVal.isValid("http://afterzmusic.com:ZZ/about/?action=edit&mode=up")); 
+
+		//[valid, valid, valid, invalid, valid]
+		assertFalse(urlVal.isValid("http://www.google.com:65535/../?action=view"));
+		assertFalse(urlVal.isValid("http://afterzmusic.com:80/about//file?action=edit&mode=up")); 
+
+		//[valid, valid, valid, valid, invalid]
+		assertFalse(urlVal.isValid("http://www.google.com:65535/test1?action=&"));
+		assertFalse(urlVal.isValid("http://afterzmusic.com:80/about/?edit&mode=up")); 
+
+		//[absent, invalid, absent, absent, absent]
+		assertFalse(urlVal.isValid("1.2.3"));
+		assertFalse(urlVal.isValid("afterz")); 
+		
+		//[absent, valid, absent, invalid, absent]
+		assertFalse(urlVal.isValid("www.google.com/../"));
+		assertFalse(urlVal.isValid("afterzmusic.com/about//file")); 
+
+		//[valid, absent, valid, valid, valid]
+		assertFalse(urlVal.isValid("http://:65535/test1?action=view"));
+		assertFalse(urlVal.isValid("http://:80/about/?action=edit&mode=up"));    
    }
-   
-   public void testYourSecondPartition(){
-	   
-   }
-   
    
    public void testIsValid()
    {
@@ -75,12 +186,6 @@ public class UrlValidatorTest extends TestCase {
 		   }
 	   }
    }
-   
-   public void testAnyOtherUnitTest()
-   {
-	   
-   }
-   
    
    private ResultPair generateRandomUrl()
    {
