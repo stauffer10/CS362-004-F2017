@@ -1,0 +1,45 @@
+Title: Switch block fall through on adventurer card effect
+
+Description:
+
+  The switch block in cardEffect that branches on card chosen does not include 
+  either a break or return statement after the call to playAdventurer. This 
+  results in fall through when an adventurer card is played, meaning the effects 
+  intended for the adventurer card and the card following the adventurer card, 
+  the council room, are applied.
+
+Steps to reproduce:
+
+  1. Call the cardEffect function with card = adventurer.
+
+Expected results:
+
+  1. The effects of the adventurer card are applied.
+
+Actual results:
+
+  1. The effects of the adventurer card and the council room card are applied.
+
+
+
+Title: Sea Hag affects the wrong players
+
+Description:
+
+  The sea hag card is intended to cause all other players to replace their top 
+  deck card with a curse card, but it is not supposed to have this effect on the 
+  player using the card. 
+
+Steps to reproduce:
+
+  1. Call the cardEffect function with card = sea_hag.
+
+Expected results:
+
+  1. The player who used the sea hag card will not have their deck affected.
+  2. All other players will have their decks affected.
+
+Actual results:
+
+  1. The player who used the sea hag card does have their deck affected.
+  2. All other players do not have their decks affected.
