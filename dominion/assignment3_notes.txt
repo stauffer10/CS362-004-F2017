@@ -1,0 +1,155 @@
+
+**4 functions to test in dominion.c:
+(1) initializeGame
+ - create my own fake attributes/settings for a game (test can take these as parameters)
+ - call initializeGame with those attributes as parameters
+ - what to check:
+	- all parameters initialized correctly...
+		- number of players
+		- 10 kingdom cards in play (and rest not in play)
+	- state of game is correct
+		- supply counts are correct
+		- player decks are correct
+		- all embargo tokens are at 0
+	- check that first player is correctly set up
+		- outpostPlayed, phase, playedCardCount, whoseTurn, handCount[player] all are 0
+		- numActions, numBuys are set to 1
+	- check overall success or fail
+		- if 2 kingdom cards are the same, it should fail
+		- if number of players is illegal, it should fail
+		- if shuffle fails, it should fail
+		- otherwise it should succeed
+ 
+ 
+ 
+(2) fullDeckCount
+ - initialize game
+ - create second gamestate and copy from the first
+ - call fullDeckCount for first player
+ - simulate one round with specific cards added/subtracted
+ - call fullDeckCount for first player again
+ - what to check:
+	- player 1 has correct number of selected card to start game
+	- gamestate was not changed by fullDeckCount
+	- player 1 has correct card counts after 1 turn
+	- check overall success or fail
+	
+	
+
+(3) endTurn
+ - initialize 2 player game
+ - create second gamestate and copy from first
+ - call endTurn
+ - copy second gamestate from first again
+ - call endTurn again
+ - what to check:
+	- gamestate has appropriately changed after each turn
+		- whoseTurn should have changed
+		- previous player has nothing in his hand
+		- previous player has correct discard counts
+		- numBuys, numActions reset to 1
+		- coins, playedCardCount reset to 0
+	- after second player finishes, check that the turn resets to first player
+	- check overall success or fail
+		
+
+
+
+
+(4) gainCard
+ - keep supply count variable starting with 10
+ - initialize game
+ - create second gamestate and copy from first
+ - call gainCard with toFlag = 1; decrement supply count var   (playable card)
+ - call gainCard with toFlag = 2; decrement supply count var    (same card)
+ - call gainCard with toFlag = 0; decrement supply count var    (same card)
+ - call gainCard for card not in play
+ - what to check:
+	- does my supply count variable match gamestate after each call?
+	- is any other part of gamestate changed?
+	- after toFlag = 1, are deck and deckcount updated?
+	- after toFlag = 2, are hand and handcount updated?
+	- after toFlag = 0, are discard and discardcount updated?
+	- does it allow us to get a card that shouldn't be available? 
+	- check overall success or failure
+		- should fail if we try to gain a card not in play
+
+
+
+**4 card implementation functions to test in dominion.c
+(1) adventurer
+ - initialize game
+ - edit gamestate so that current player has no treasure cards in hand
+ - create second gamestate and copy from first
+ - call cardEffect with adventurer and test
+ - reset to original gamestate
+ - call playAdventurer by itself and test
+ - what to check:
+	- hand should gain 2 treasures (and be 7 total)
+	- gamestate should not be affected for other players
+	- kingdom card and victory card piles unaffected
+	- check overall success or failure
+	
+	
+(2) smithy
+ - initialize game
+ - create second gamestate and copy from first
+ - call cardEffect with smithy and test
+ - reset to original gamestate
+ - call playSmithy and test
+ - what to check:
+	- hand size should increase by 2 (+3 cards and -1 to discard smithy)
+	- deck size should decrease by 3
+	- gamestate should not be affected for other players
+	- kingdom card and victory card piles unaffected
+	- check overall success or failure
+
+(3) embargo
+ - initialize game
+ - create second gamestate and copy from first
+ - call cardEffect with embargo and test  (pick specific kingdom card to block)
+ - reset to original gamestate
+ - call playEmbargo and test
+ - what to check:
+	- specific kingdom card should have embargoToken set to 1
+	- there should be one less embargo in players fullDeckCount
+	- gamestate should not be affected for other players
+	- kingdom card and victory card piles unaffected
+	- check whether or not it allows an unplayable pile to be selected
+	- check overall success or failure
+		- if selected pile is not in play, will fail
+
+(4) sea hag
+ - initialize game
+ - create second gamestate and copy from first
+ - call cardEffect with sea hag and test
+ - reset to original gamestate
+ - call playSeaHag and test
+ - what to check:
+	- every other player should have curse in deck
+	- every other player should have one more in discard
+	- current player's gamestate unaffected
+	- kingdom card and victory card piles unaffected
+	- check overall success or failure
+
+
+
+
+**written section "bugs" to describe what bugs I found
+
+
+
+
+
+**edit makefile to resemble the one used in the bst example project
+Look at results from using gcov. Output file should be called unittestresults.out
+
+
+
+**written section "unit testing" to describe coverage and what parts of code
+are not covered
+
+
+
+
+**written section "unit testing efforts" to describe what I did in my unit tests
