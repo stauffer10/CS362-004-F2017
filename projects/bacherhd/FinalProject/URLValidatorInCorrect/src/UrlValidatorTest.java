@@ -209,12 +209,8 @@ public void testYourFirstPartition(){
 	result = boolAssert(urlVal.isValid("http://:80/about/?action=edit&mode=up"), false); 
 	allTestsPass &= result;
 	
-	if (allTestsPass == true){
-		System.out.println("All Tests Pass");	
-	}
-	else {
-		System.out.println("Failures found");
-	}
+	//run should fail if any one test fails
+	assertTrue(allTestsPass);
 	     
 } 
 
