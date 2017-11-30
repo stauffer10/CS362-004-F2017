@@ -89,7 +89,7 @@ public class UrlValidatorTest extends TestCase {
 	   } 
    }
    
-   private boolean boolAssert(boolean received, boolean expected){
+	private boolean boolAssert(boolean received, boolean expected){
 
 	if (received == expected){
 		System.out.println("TEST PASSED");
@@ -103,116 +103,153 @@ public class UrlValidatorTest extends TestCase {
 
 
 
-public void testYourFirstPartition(){ 
-	UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES); 
- 
-	boolean result;
-	boolean allTestsPass = true;
+	public void testYourFirstPartition(){ 
+		UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES); 
+	 
+		boolean result;
+		boolean allTestsPass = true;
 
- 
- 	/**** 
- 	* consider the five parts of URL - scheme, authority, port, path, query as 
- 	* [valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent] 
- 	* an example assertion may be [valid, valid, valid, valid, invalid] 
-	****/ 
+	 
+		/**** 
+		* consider the five parts of URL - scheme, authority, port, path, query as 
+		* [valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent, valid/invalid/absent] 
+		* an example assertion may be [valid, valid, valid, valid, invalid] 
+		****/ 
 
- 	//first try valid URL's 
-	System.out.println("TEST: [valid, valid, valid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1?action=view"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about/?action=edit&mode=up"), true); 
-	allTestsPass &= result;
+		//first try valid URL's 
+		System.out.println("TEST: [valid, valid, valid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1?action=view"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about/?action=edit&mode=up"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1?action=edit&mode=up"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [absent, valid, valid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("www.google.com:65535/test1?action=view"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("afterzmusic.com:80/about/?action=edit&mode=up"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [absent, valid, valid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("www.google.com:65535/test1?action=view"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("afterzmusic.com:80/about/?action=edit&mode=up"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("www.google.com:65535/test1?action=edit&mode=up"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, absent, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com/test1?action=view"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com/about/?action=edit&mode=up"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, absent, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com/test1?action=view"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com/about/?action=edit&mode=up"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://www.google.com/about/?action=view"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, valid, absent, valid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:65535?action=view"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:80?action=edit&mode=up"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, valid, absent, valid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:65535?action=view"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:80?action=edit&mode=up"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://www.google.com::80?action=edit&mode=up"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, valid, valid, absent]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about/"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, valid, valid, absent]"); 
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:65535/test1"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:65000/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:62309/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:56789/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:30456/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:10000/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:1000/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:999/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:800/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:555/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:55/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:1/about/"), true); 
+		allTestsPass &= result;
+		
+		System.out.println("TEST: [valid, valid, valid, absent, absent]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:10"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:999"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:1000"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [absent, valid, absent, valid, absent]"); 
-	result = boolAssert(urlVal.isValid("www.google.com/test1"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("afterzmusic.com/about/"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [absent, valid, absent, valid, absent]"); 
+		result = boolAssert(urlVal.isValid("www.google.com/test1"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("afterzmusic.com/about/"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("afterzmusic.com/test1"), true); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, absent, absent, absent]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com"), true); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com"), true); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, absent, absent, absent]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com"), true); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com"), true); 
+		allTestsPass &= result;
 
-	
-	//try invalid URL's by testing one invalid section at a time 
-	System.out.println("TEST: [invalid, valid, valid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http:www.google.com:65535/test1?action=view"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("://afterzmusic.com:80/about/?action=edit&mode=up"), false); 
-	allTestsPass &= result;
+		
+		//try invalid URL's by testing one invalid section at a time 
+		System.out.println("TEST: [invalid, valid, valid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http:www.google.com:65535/test1?action=view"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("://afterzmusic.com:80/about/?action=edit&mode=up"), false); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, invalid, valid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://1.2.3:65535/test1?action=view"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterz:80/about/?action=edit&mode=up"), false); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, invalid, valid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://1.2.3:65535/test1?action=view"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterz:80/about/?action=edit&mode=up"), false); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, invalid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:-1/test1?action=view"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:ZZ/about/?action=edit&mode=up"), false); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, invalid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:-1/test1?action=view"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:ZZ/about/?action=edit&mode=up"), false); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, valid, invalid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:65535/../?action=view"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about//file?action=edit&mode=up"), false); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, valid, invalid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:65535/../?action=view"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about//file?action=edit&mode=up"), false); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [valid, valid, valid, valid, invalid]"); 
-	result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1?action=&"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about/?edit&mode=up"), false); 
-	allTestsPass &= result;
+		System.out.println("TEST: [valid, valid, valid, valid, invalid]"); 
+		result = boolAssert(urlVal.isValid("http://www.google.com:65535/test1?action=&"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://afterzmusic.com:80/about/?edit&mode=up"), false); 
+		allTestsPass &= result;
 
-	System.out.println("TEST: [absent, invalid, absent, absent, absent]"); 
-	result = boolAssert(urlVal.isValid("1.2.3"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("afterz"), false); 
-	allTestsPass &= result;
-    
- 	System.out.println("TEST: [absent, valid, absent, invalid, absent]"); 
-	result = boolAssert(urlVal.isValid("www.google.com/../"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("afterzmusic.com/about//file"), false); 
-	allTestsPass &= result;
-	
- 	System.out.println("TEST: [valid, absent, valid, valid, valid]"); 
-	result = boolAssert(urlVal.isValid("http://:65535/test1?action=view"), false); 
-	allTestsPass &= result;
-	result = boolAssert(urlVal.isValid("http://:80/about/?action=edit&mode=up"), false); 
-	allTestsPass &= result;
-	
-	//run should fail if any one test fails
-	assertTrue(allTestsPass);
-	     
-} 
+		System.out.println("TEST: [absent, invalid, absent, absent, absent]"); 
+		result = boolAssert(urlVal.isValid("1.2.3"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("afterz"), false); 
+		allTestsPass &= result;
+		
+		System.out.println("TEST: [absent, valid, absent, invalid, absent]"); 
+		result = boolAssert(urlVal.isValid("www.google.com/../"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("afterzmusic.com/about//file"), false); 
+		allTestsPass &= result;
+		
+		System.out.println("TEST: [valid, absent, valid, valid, valid]"); 
+		result = boolAssert(urlVal.isValid("http://:65535/test1?action=view"), false); 
+		allTestsPass &= result;
+		result = boolAssert(urlVal.isValid("http://:80/about/?action=edit&mode=up"), false); 
+		allTestsPass &= result;
+		
+		//run should fail if any one test fails
+		assertTrue(allTestsPass);
+	} 
 
    
    
