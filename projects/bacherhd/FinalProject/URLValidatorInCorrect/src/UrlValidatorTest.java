@@ -89,7 +89,7 @@ public class UrlValidatorTest extends TestCase {
 	   } 
    }
    
-   private bool boolAssert(bool received, bool expected){
+   private boolean boolAssert(boolean received, boolean expected){
 
 	if (received == expected){
 		System.out.println("TEST PASSED");
@@ -106,8 +106,8 @@ public class UrlValidatorTest extends TestCase {
 public void testYourFirstPartition(){ 
 	UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES); 
  
-	bool result;
-	bool allTestsPass = true;
+	boolean result;
+	boolean allTestsPass = true;
 
  
  	/**** 
